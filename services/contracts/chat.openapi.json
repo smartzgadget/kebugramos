@@ -1,0 +1,14 @@
+{
+  "openapi": "3.1.0",
+  "info": { "title": "KebuGram Chat — 9.1", "version": "0.1.0", "description": "ChatRow + Message + Presence, WS fanout 50k, Zod → OpenAPI." },
+  "servers": [{ "url": "http://localhost:4005" }],
+  "paths": {
+    "/chat/publish": { "post": { "requestBody": { "required": true, "content": { "application/json": { "schema": { "type": "object", "required": ["channel", "data"], "properties": { "channel": { "type": "string" }, "data": { "type": "object" } } } } } }, "responses": { "200": { "description": "published" } } } },
+    "/health": { "get": { "responses": { "200": { "description": "ok" } } } }
+  },
+  "components": { "schemas": {
+    "ChatRow": { "type": "object", "required": ["id", "title", "lastMessage", "unreadCount"], "properties": { "id": { "type": "string" }, "title": { "type": "string" }, "lastMessage": { "type": "string" }, "unreadCount": { "type": "integer" }, "isBusiness": { "type": "boolean" }, "isVerified": { "type": "boolean" } } },
+    "Message": { "type": "object", "required": ["id", "chatId", "text", "at"], "properties": { "id": { "type": "string" }, "chatId": { "type": "string" }, "text": { "type": "string" }, "at": { "type": "string", "format": "date-time" } } },
+    "Presence": { "type": "object", "required": ["userId", "status"], "properties": { "userId": { "type": "string" }, "status": { "type": "string", "enum": ["online", "offline"] } } }
+  } }
+}
