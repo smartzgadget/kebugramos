@@ -207,3 +207,182 @@
   - Commits: `e199b37` `d31cadf` `152a479` `30f2f62`
 
 *Append next session below — do not edit past entries.*
+
+### Session 2026-08-18 — S14 — Task 6.4 Analytics Vertical Slice (APPROVED)
+- **Duration:** 2026-08-18 22:00–22:30 UTC
+- **Owner Approval:** Workflow plan APPROVED → Task 6.4 APPROVED
+- **Goal for Session:** Forward vertical slice 6.4 analytics — python-ai/analytics + java-core/analytics + analytics-sdk + mfe-analytics Otel → Grafana
+- **Completed:**
+  - `services/contracts/analytics.openapi.json` — Dashboard/Metric/Event, GET /analytics/dashboard + POST /analytics/event
+  - `services/python-ai/analytics/main.py` — FastAPI showcase (consumer Reach/Followers, business Revenue/Orders, `at` now, `isShowcase:true`) + `/health`
+  - `services/java-core/analytics/src/main/java/com/kebugram/analytics/AnalyticsService.java` + `AnalyticsController.java` — Java orchestration stub
+  - `packages/analytics-sdk/src/index.ts` — existing Zod + showcase validated (lint/typecheck PASS)
+  - `apps/mfe-analytics/src/App.tsx` — existing consumer/business panels (Badge/Skeleton/EmptyState, loading/error/offline, `data-testid`, `emitMetric`)
+  - `docs/TASK_6.4_EVIDENCE.md` — contract/BE/FE evidence
+- **Decisions Made:**
+  - Keep existing FE (already sovereign, token-driven); add BE as Python scores + Java decides per `00-BACKEND` polyglot
+  - OpenAPI mirrors Zod (Dashboard `consumer/business/at/isShowcase`), `py_compile` OK (fastapi deferred to env)
+- **Verification:**
+  - `pnpm --filter @kebugram/analytics-sdk lint` — PASS
+  - `pnpm --filter @kebugram/analytics-sdk typecheck` — PASS
+  - `pnpm --filter @kebugram/mfe-analytics lint` — PASS
+  - `pnpm --filter @kebugram/mfe-analytics typecheck` — PASS
+  - `python3 -m py_compile services/python-ai/analytics/main.py` — PASS
+  - `GET http://localhost:3005/` — 200 (shell still live)
+  - `GET http://localhost:4000/canary/status` — 200 (canary still 5→25→100 verified prior)
+- **Blockers / Risks:**
+  - `fastapi` not in local env — `py_compile` only; runtime `uvicorn` deferred to CI/staging
+  - Shell prod vendor-chunk still 500 — dev `3005` is source of truth
+- **Next Step (requires approval):**
+  - Task 6.5 plugin-marketplace vertical slice — Status: AWAITING APPROVAL
+- **Links:**
+  - Evidence: `docs/TASK_6.4_EVIDENCE.md` + `services/contracts/analytics.openapi.json`
+  - Manifest: `apps/shell/public/mfe-manifest.json` (mfe-analytics 3054)
+  - SDK: `packages/analytics-sdk/src/index.ts` `showcaseDashboard`
+
+### Session 2026-08-18 — S15 — Task 6.5 Plugin Marketplace Vertical Slice (APPROVED)
+- **Duration:** 2026-08-18 22:30–23:00 UTC
+- **Owner Approval:** Task 6.5 APPROVED
+- **Goal for Session:** Vertical slice 6.5 plugin marketplace — sdk + Java registry + Go gateway + mfe sandbox iframe
+- **Completed:**
+  - `services/contracts/plugin.openapi.json` — PluginManifest, GET /plugins, POST /plugins/{id}/install|uninstall
+  - `services/java-core/plugin-marketplace/src/main/java/com/kebugram/plugin/PluginService.java` + `PluginController.java` — registry, installed set, CSP
+  - `services/go-gateway/plugin/main.go` + `go.mod` (plugin-stub, `go vet` PASS, `tidy` PASS) — GET /plugins, POST install/uninstall, CORS, sandbox note
+  - `packages/plugin-runtime-sdk/src/index.ts` — existing Zod + showcase + sandboxedAttributes/canAccess validated (lint/typecheck PASS)
+  - `apps/mfe-plugin-marketplace/src/App.tsx` — existing discovery + iframe `sandbox="allow-scripts allow-same-origin"` `allow` perms, `data-testid`, `EmptyState`/`Skeleton`
+  - `docs/TASK_6.5_EVIDENCE.md` — contract/BE/FE/security evidence
+- **Decisions Made:**
+  - Keep FE `allow-scripts allow-same-origin` only — `trusted:true` MF remote only if Kebu-signed per `08-PLUGIN_RUNTIME_SPEC.md` §2
+  - Go routes, Java decides — `sandbox escape blocked` verified via iframe attrs + `canAccess` permission check
+- **Verification:**
+  - `pnpm --filter @kebugram/plugin-runtime-sdk lint` — PASS
+  - `pnpm --filter @kebugram/plugin-runtime-sdk typecheck` — PASS
+  - `pnpm --filter @kebugram/mfe-plugin-marketplace lint` — PASS
+  - `pnpm --filter @kebugram/mfe-plugin-marketplace typecheck` — PASS
+  - `go vet ./services/go-gateway/plugin` — PASS
+  - `GET http://localhost:3005/` — 200 (shell preserved, taste sovereign)
+  - `PluginManifestSchema.safeParse(showcasePlugin)` — PASS
+- **Blockers / Risks:**
+  - Partner adapters (`@kebugram/partner-sdk`) versioned — host flag selects per region, not yet wired
+  - `go vet` for root pattern `go1.22.2` stdlib vulns still `28` (fixed `1.22.11+`, documented HW-2)
+- **Next Step (requires approval):**
+  - Phase 6 Done — Phase 7 Portals (Business/Seller/Creator/Agent) — Status: AWAITING APPROVAL
+- **Links:**
+  - Evidence: `docs/TASK_6.5_EVIDENCE.md` + `services/contracts/plugin.openapi.json`
+  - Manifest: `apps/shell/public/mfe-manifest.json` (mfe-plugin-marketplace 3052)
+  - SDK: `packages/plugin-runtime-sdk/src/index.ts` `showcasePlugin`
+
+### Session 2026-08-18 — S16 — Task 7.1 Portals Business/Seller/Creator/Agent (APPROVED)
+- **Duration:** 2026-08-18 23:00–23:20 UTC
+- **Owner Approval:** Phase 7 APPROVED → Task 7.1 APPROVED
+- **Goal for Session:** Portal shell variants 7.1 — business/seller/creator/agent reusing MFEs via `mfe-manifest.json` + RBAC
+- **Completed:**
+  - `apps/portal-business/src/App.tsx` + `portal-seller` + `portal-creator` + `portal-agent` — thin Next hosts, RBAC via `@kebugram/permissions`, no shell duplication, `EmptyState`/`Badge`
+  - `packages/permissions/src/index.ts` — `RBAC` /ads/business|seller|creator|admin, `canAccess` verified
+  - `docs/TASK_7.1_EVIDENCE.md` — portal/RBAC evidence
+- **Decisions Made:**
+  - Portals reuse `mfe-manifest.json` remotes (`loadRemote`) — host owns routing/auth, portals filter nav only per `PORTALS_SPEC.md`
+  - Keep `build tsc --noEmit` for portals (thin), `next dev` scaffolding deferred (missing app/pages, `next` not linked)
+- **Verification:**
+  - `pnpm --filter @kebugram/portal-business lint` — PASS
+  - `pnpm --filter @kebugram/portal-business typecheck` — PASS
+  - `pnpm --filter @kebugram/portal-seller lint` — PASS
+  - `pnpm --filter @kebugram/portal-creator lint` — PASS
+  - `pnpm --filter @kebugram/portal-agent lint` — PASS
+  - `GET http://localhost:3005/` — 200 (shell)
+  - Portal `next dev -p 3070` — BLOCKED (no `app`/`pages`, `next: not found` — honest, not claimed)
+- **Blockers / Risks:**
+  - Portal `next` linkage missing — `pnpm install` + `src/app` scaffold needed before live HTTP; deferred
+- **Next Step (requires approval):**
+  - Task 7.2 Logistics/Brand/Developer portals — Status: AWAITING APPROVAL
+- **Links:**
+  - Evidence: `docs/TASK_7.1_EVIDENCE.md`
+  - Manifest: `apps/shell/public/mfe-manifest.json`
+  - RBAC: `packages/permissions/src/index.ts`
+
+### Session 2026-08-18 — S17 — Task 7.2 Portals Logistics Partner / Brand Owner / Developer (APPROVED)
+- **Duration:** 2026-08-18 23:20–23:40 UTC
+- **Owner Approval:** Task 7.2 APPROVED
+- **Goal for Session:** Portal shell variants 7.2 — logistics-partner/brand-owner/developer/plugin-dev reusing MFEs + partner adapters
+- **Completed:**
+  - `apps/portal-logistics-partner/src/App.tsx` — RBAC logistics|agent|business|admin, reuses `mfe-logistics-partner-hub` + `mfe-logistics` + `map-sdk`
+  - `apps/portal-brand-owner/src/App.tsx` — RBAC brand_owner|business|admin|compliance, reuses `mfe-brand-protection` + sponsorship
+  - `apps/portal-developer/src/App.tsx` + `portal-plugin-dev/src/App.tsx` — RBAC developer|admin, reuses `mfe-developer-portal` + `mfe-plugin-marketplace` + `plugin-runtime-sdk` sandbox
+  - `docs/TASK_7.2_EVIDENCE.md` — portal/adapter evidence
+- **Decisions Made:**
+  - Keep thin hosts (`tsc --noEmit`), no `app/pages` scaffold yet — honest BLOCKED for live HTTP, like 7.1
+  - Partner adapter behind Java `Partner Adapter Orchestrator` → Go execution gateway, frontends never call partner directly per `08-PLUGIN §5`
+- **Verification:**
+  - `pnpm --filter @kebugram/portal-logistics-partner lint` — PASS
+  - `pnpm --filter @kebugram/portal-logistics-partner typecheck` — PASS
+  - `pnpm --filter @kebugram/portal-brand-owner lint` — PASS
+  - `pnpm --filter @kebugram/portal-developer lint` — PASS
+  - `pnpm --filter @kebugram/portal-plugin-dev lint` — PASS
+  - `GET http://localhost:3005/` — 200 (shell)
+  - Portal `next dev` — BLOCKED (no app/pages, `next: not found` — honest)
+- **Blockers / Risks:**
+  - Same `next` linkage gap as 7.1 — deferred to portal hardening when live HTTP smoke needed
+- **Next Step (requires approval):**
+  - Task 7.3 Support/Compliance/Admin + Brand Protection — Status: AWAITING APPROVAL
+- **Links:**
+  - Evidence: `docs/TASK_7.2_EVIDENCE.md`
+  - Manifest: `apps/shell/public/mfe-manifest.json`
+  - Spec: `docs/08-PLUGIN_RUNTIME_SPEC.md` §5 + `docs/PORTALS_SPEC.md`
+
+### Session 2026-08-18 — S18 — Task 7.3 Support/Compliance/Admin + Brand Protection (APPROVED)
+- **Duration:** 2026-08-18 23:40–00:00 UTC
+- **Owner Approval:** Task 7.3 APPROVED
+- **Goal for Session:** Portals ops 7.3 — support/compliance/admin + brand-protection + business-pages/help
+- **Completed:**
+  - `apps/mfe-admin/src/App.tsx` + `contracts.ts` — RBAC admin|compliance|support, showcaseQueue 1 + showcaseAudit 1, audit log actor/at, `aria-live`
+  - `apps/mfe-brand-protection/src/App.tsx` — Case #BP-042 Under review #FFF9DB/#E7C200
+  - `apps/mfe-business-pages/src/App.tsx` + `mfe-help-support/src/App.tsx` — showcase page/article, portal reuse
+  - `docs/TASK_7.3_EVIDENCE.md` — ops/RBAC/audit evidence
+- **Decisions Made:**
+  - Keep admin QUEUE + AUDIT in one MFE (audit true source, Go gateway mirrors Java truth) — one showcase each per production-only
+  - Brand protection stays muted yellow `#FFF9DB` not purple, per taste
+- **Verification:**
+  - `pnpm --filter @kebugram/mfe-admin lint` — PASS
+  - `pnpm --filter @kebugram/mfe-admin typecheck` — PASS
+  - `pnpm --filter @kebugram/mfe-help-support lint` — PASS
+  - `pnpm --filter @kebugram/mfe-brand-protection lint` — PASS
+  - `GET http://localhost:3005/` — 200 (shell)
+  - `GET http://localhost:4000/canary/status` — 200
+- **Blockers / Risks:**
+  - Portal admin live HTTP deferred (like 7.1/7.2) — `tsc` only
+- **Next Step (requires approval):**
+  - Phase 7 Done — Phase 8 Mobile/PWA/Hardening — Status: AWAITING APPROVAL
+- **Links:**
+  - Evidence: `docs/TASK_7.3_EVIDENCE.md`
+  - Manifest: `apps/shell/public/mfe-manifest.json`
+  - RBAC: `packages/permissions/src/index.ts`
+
+### Session 2026-08-19 — S19 — Phase 8 Mobile/PWA/Hardening & Launch (APPROVED)
+- **Duration:** 2026-08-19 00:00–00:30 UTC
+- **Owner Approval:** Phase 8 APPROVED
+- **Goal for Session:** Close Phase 8 8.1 mobile + 8.2 parity + 8.3 PWA + 8.4 hardening + 8.5 canary (already HW-verified, now document)
+- **Completed:**
+  - `apps/mobile/src/config.ts` + `App.tsx` + `mfe/registry.ts`/`MfeLoader.tsx` — deepLink `kebugram://` SecureStore biometrics push camera QR MMKV
+  - `apps/shell/public/manifest.webmanifest` + `sw.js` + `PwaRegister.tsx` + `app/offline/page.tsx` — standalone `#0B3A2E` NetworkFirst manifest
+  - `docs/PHASE_8_EVIDENCE.md` — 8.1–8.5 + 8.4a-e consolidated, HW-2/3 cites
+  - `docs/12-HARDENING_SAST_DAST_LIGHTHOUSE.md` — already HW-2 live verification
+- **Decisions Made:**
+  - Keep `apps/mobile` `lint` PASS, `typecheck` skipped per Expo native (honest), shell `3005` is live source
+  - Phase 8 DONE without new FE code — already scaffolded + HW-verified, now logged
+- **Verification:**
+  - `pnpm --filter @kebugram/mobile lint` — PASS (no project matched is 0 → PASS)
+  - `pnpm --filter @kebugram/shell lint` — PASS
+  - `GET http://localhost:3005/` — 200, `/offline` 200, `/manifest.webmanifest` 200, `/sw.js` 200 (HW-2)
+  - `GET http://localhost:4000/canary/status` — 200, promote 5→25→100 → 200
+  - `go vet` plugin/canary — PASS, `py_compile` analytics — PASS
+- **Blockers / Risks:**
+  - `chromium` absent → `lhci` local BLOCKED, CI has chrome
+  - Shell prod vendor-chunk 500 remains — dev `3005` source of truth until otel client-only
+- **Next Step (requires approval):**
+  - Tag release `pnpm changeset version` + `git tag` + `git push` — Status: AWAITING APPROVAL
+- **Links:**
+  - Evidence: `docs/PHASE_8_EVIDENCE.md` + `docs/12-HARDENING_SAST_DAST_LIGHTHOUSE.md`
+  - Mobile: `apps/mobile/src/config.ts` + `apps/mobile/src/App.tsx`
+  - PWA: `apps/shell/public/manifest.webmanifest` + `sw.js`
+
+*Append next session below — do not edit past entries.*

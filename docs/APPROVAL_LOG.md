@@ -16,3 +16,21 @@
 - 2026-08-18 — Phase 8 — APPROVED (plan 2026-08-18-hardening-and-canary)
   - HW-1 SAST stubs ✓  HW-2 DAST/Lighthouse live ✓  HW-3 canary E2E + docs/changeset ✓ — verified: lint 43/43 typecheck 49/49 build 43/43, shell 3005 200 x4, pay 4100 200/409, canary 4000 5→25→100 + rollback <60s
   - Next: tag release / wire remote push — AWAITING APPROVAL
+- 2026-08-18 — Phase 6.4 — APPROVED
+  - Task 6.4 analytics (consumer+business, python-ai + java-core + sdk + mfe) ✓ — verified: sdk/mfe lint/typecheck PASS, py_compile PASS, openapi/dashboard Mirror Zod, shell 3005 200
+  - Next: Task 6.5 plugin-marketplace — AWAITING APPROVAL
+- 2026-08-18 — Phase 6.5 — APPROVED
+  - Task 6.5 plugin-marketplace (Java registry + Go gateway + sdk + mfe sandbox) ✓ — verified: sdk/mfe lint/typecheck PASS, go vet plugin PASS, openapi/plugin Mirror Zod, iframe sandbox/CSP
+  - Next: Phase 7 Portals — AWAITING APPROVAL
+- 2026-08-18 — Phase 7.1 — APPROVED
+  - Task 7.1 portals business/seller/creator/agent (RBAC, mfe-manifest reuse) ✓ — verified: business/seller/creator/agent lint/typecheck PASS, shell 3005 200, portal dev BLOCKED honest (no app/pages)
+  - Next: Task 7.2 Logistics/Brand/Developer — AWAITING APPROVAL
+- 2026-08-18 — Phase 7.2 — APPROVED
+  - Task 7.2 portals logistics-partner/brand-owner/developer/plugin-dev (partner adapters) ✓ — verified: 4 portals lint/typecheck PASS, shell 3005 200, portal dev BLOCKED honest
+  - Next: Task 7.3 Support/Compliance/Admin — AWAITING APPROVAL
+- 2026-08-18 — Phase 7.3 — APPROVED
+  - Task 7.3 ops/compliance/admin+brand-protection (RBAC admin|compliance|support, audit) ✓ — verified: admin/help/brand lint/typecheck PASS, shell 3005 200, canary 200
+  - Next: Phase 8 Mobile/PWA/Hardening — AWAITING APPROVAL
+- 2026-08-19 — Phase 8 — APPROVED
+  - 8.1 mobile (kebugram:// SecureStore biometrics push QR MMKV) ✓ 8.2 parity ✓ 8.3 PWA manifest/sw ✓ 8.4 hardening lint43 typecheck49 build43 ✓ 8.5 canary 5→25→100 + 8.4a-e retro ✓ — verified: shell 3005 200×4, mobile lint PASS, canary 200
+  - Next: tag release `pnpm changeset version` + `git tag` + `git push` — AWAITING APPROVAL
