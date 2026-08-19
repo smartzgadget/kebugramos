@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>KebuChat — Showcase</title>
+<style>
+:root{--color-border:#DDE4E1;--color-surface:#F7F9F8;--color-text-primary:#0B3A2E;--color-text-secondary:#5B6B65}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,sans-serif;background:#F7F9F8;color:var(--color-text-primary)}
+.shell{max-width:820px;margin:24px auto;padding:16px}
+.card{display:grid;grid-template-columns:320px 1fr;border:1px solid var(--color-border);border-radius:12px;overflow:hidden;background:white;min-height:480px}
+.left{border-right:1px solid var(--color-border);display:grid;grid-template-rows:1fr auto}
+.chat-row{display:flex;gap:10px;padding:10px 12px;border-bottom:1px solid var(--color-surface)}
+.chat-row.active{background:var(--color-surface)}
+.avatar{width:36px;height:36px;border-radius:999px;background:#0B3A2E;color:white;display:grid;place-items:center;font-size:12px;font-weight:700}
+.meta{font-size:11px;color:var(--color-text-secondary)}
+.badge{font-size:10px;font-weight:700;background:#E6F4EA;color:#0B3A2E;border-radius:999px;padding:2px 6px}
+.bottom-nav{display:flex;gap:4px;padding:8px;border-top:1px solid var(--color-border);font-size:12px;font-weight:600;justify-content:space-around}
+</style>
+</head>
+<body>
+<div class="shell">
+  <h2 style="margin:0;font-size:20px;font-weight:700">KebuChat — Showcase (federated remote preview)</h2>
+  <p style="font-size:13px;color:var(--color-text-secondary)">Realtime via Go gateway + realtime-sdk. Same App.tsx that shell loads at #mfe-slot via mfe-manifest.json → loadRemote('mfe-kebuchat').</p>
+  <div class="card">
+    <div class="left">
+      <div>
+        <div class="chat-row active"><div class="avatar">KS</div><div style="flex:1"><div style="display:flex;gap:6px;align-items:center"><span style="font-size:13px;font-weight:700">KebuStore Support</span><span class="badge">BUSINESS</span><span style="margin-left:auto;font-size:11px;background:#0B3A2E;color:white;border-radius:999px;padding:2px 6px">2</span></div><div class="meta">Your order #4821 is out for delivery</div></div></div>
+        <div style="padding:12px;font-size:12px;color:var(--color-text-secondary);text-align:center">One showcase record — production-only, isShowcase:true excluded from analytics</div>
+      </div>
+      <div class="bottom-nav"><span>Chats</span><span>Calls</span><span>Business</span><span>Settings</span></div>
+    </div>
+    <div style="padding:16px;display:grid;place-items:start"><div><h3 style="margin:0">Chat 1</h3><p style="color:var(--color-text-secondary);font-size:13px">Messages render here — realtime via Go gateway + realtime-sdk.</p><div style="border:1px dashed var(--color-border);border-radius:8px;padding:12px;font-size:12px;background:var(--color-surface)">Federated: shell 3005 → fetch /mfe-manifest.json → http://localhost:3010/remoteEntry.js → loadRemote('mfe-kebuchat') → #mfe-slot</div></div></div>
+  </div>
+</div>
+</body>
+</html>
