@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { showcaseAudit, showcaseQueue, AuditEntry } from "./contracts";
 import { Badge, Button, EmptyState } from "@kebugram/design-system";
 import { type Role } from "@kebugram/permissions";

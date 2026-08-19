@@ -65,7 +65,7 @@ export default function BrowserApp() {
           {!allowed ? (
             <EmptyState title="Consent required" description="Tracking and cookies blocked — grant analytics consent to load partner content. Host must be in permission manifest." />
           ) : (
-            <iframe data-testid="frame" src={url} title="Partner content" sandbox="allow-scripts allow-same-origin" allow="" style={{ width: "100%", height: 320, border: "none", background: "white" }} csp={showcaseManifest.csp} />
+            <iframe data-testid="frame" src={url} title="Partner content" sandbox="allow-scripts allow-same-origin" allow="" style={{ width: "100%", height: 320, border: "none", background: "white" }} />
           )}
         </div>
       </div>

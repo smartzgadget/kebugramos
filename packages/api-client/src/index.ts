@@ -10,7 +10,7 @@ export class ApiError extends Error {
 type FetchOpts = RequestInit & { idempotencyKey?: string };
 
 export function createClient(getConfig: () => { apiBase: string; getToken?: () => string | null }) {
-  async function request<T>(path: string, schema: z.ZodTypeAny, opts: FetchOpts = {}): Promise<T> {
+  async function request(path: string, schema: { parse: (v: unknown) => unknown }, opts: FetchOpts = {}): Promise<unknown> {
     const { apiBase, getToken } = getConfig();
     const headers: Record<string, string> = { "Content-Type": "application/json", ...(opts.headers as Record<string, string>) };
     const token = getToken?.();
@@ -22,7 +22,11 @@ export function createClient(getConfig: () => { apiBase: string; getToken?: () =
       throw new ApiError(String(res.status), `API ${res.status} ${path}`, body);
     }
     const json = await res.json();
-    return schema.parse(json);
+    return (schema as { parse: (v: unknown) => unknown }).parse(json);
   }
-  return { request, get: <T>(p: string, s: z.ZodTypeAny, o?: FetchOpts) => request(p, s, { ...o, method: "GET" }) as Promise<T>, post: <T>(p: string, s: z.ZodTypeAny, o?: FetchOpts) => request(p, s, { ...o, method: "POST" }) as Promise<T> };
+  return {
+    request: request as <T>(p: string, s: { parse: (v: unknown) => T }, o?: FetchOpts) => Promise<T>,
+    get: <T>(p: string, s: { parse: (v: unknown) => T }, o?: FetchOpts) => request(p, s as { parse: (v: unknown) => unknown }, { ...o, method: "GET" }) as Promise<T>,
+    post: <T>(p: string, s: { parse: (v: unknown) => T }, o?: FetchOpts) => request(p, s as { parse: (v: unknown) => unknown }, { ...o, method: "POST" }) as Promise<T>,
+  };
 }

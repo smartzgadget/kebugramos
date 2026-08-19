@@ -1,5 +1,3 @@
-import React from "react";
-
 // JS split per feature — native parity for chat|tube|market|pay
 // Each entry lazy-loads its screen; shell never bundles all MFEs upfront.
 

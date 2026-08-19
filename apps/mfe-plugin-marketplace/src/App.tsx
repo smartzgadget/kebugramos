@@ -79,7 +79,7 @@ export default function PluginMarketplaceApp() {
               {isInstalled && (
                 <div style={{ border: "1px dashed var(--color-border)", borderRadius: 8, background: "var(--color-surface)", padding: 8, display: "grid", gap: 6 }}>
                   <div style={{ fontSize: 11, color: "var(--color-text-secondary)" }}>Sandboxed iframe — `sandbox="{sb.sandbox}"` · `csp="{sb.csp.slice(0, 40)}…"` · third-party code cannot escape host/MFEs</div>
-                  <iframe data-testid={`frame-${p.id}`} src={p.entryUrl} title={p.name} sandbox={sb.sandbox as unknown as string} csp={sb.csp} allow={sb.allow} style={{ width: "100%", height: 120, border: "1px solid var(--color-border)", borderRadius: 8, background: "white" }} />
+                  <iframe data-testid={`frame-${p.id}`} src={p.entryUrl} title={p.name} sandbox={sb.sandbox as unknown as string} allow={sb.allow} style={{ width: "100%", height: 120, border: "1px solid var(--color-border)", borderRadius: 8, background: "white" }} />
                   <span style={{ fontSize: 11, color: "var(--color-text-secondary)" }}>Partner adapter: Java registry → Go `plugin execution gateway` — escape blocked</span>
                 </div>
               )}
