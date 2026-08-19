@@ -170,4 +170,40 @@
 - **Blockers:** Same proc mount
 - **Next Step:** Host one-pass gate `pnpm lint/build + lighthouserc + ZAP + headless manifest/sw/offline/tabs/deep-links/ledger+canary` — AWAITING HOST RUN
 
+### Session 2026-08-18 — S13 — Hardening HW-1–HW-3 Execution + Verify Gates Green (7152c43b resume)
+- **Duration:** 2026-08-18 20:34–21:10 UTC (resume `b7b269eb` via `7152c43b`, sandbox off)
+- **Owner Approval:** Plan `2026-08-18-hardening-and-canary` APPROVED → HW-1 APPROVED → HW-2 APPROVED → HW-3 APPROVED
+- **Goal for Session:** Close Phases 0–8: make commit+verify gates green (blocked by `proc/self/exe` in S12), then execute HW-1 SAST stubs, HW-2 DAST/Lighthouse live, HW-3 canary E2E + docs/changeset per plan.
+- **Completed:**
+  - `git init` + `e199b37` initial 299 files (shell + 26 mfe-* + portals + mobile + services) + `d31cadf` verify fix (lint 43/43, typecheck 49/49, build 43/43 — fixed `mfe-admin` useMemo, `mobile` React, `mfe-browser` csp, `plugin-marketplace` csp, `kebupay-ui` .ts→.tsx, `api-client` Zod loose, 11 `tsconfig.json`)
+  - HW-1 `152a479`: `services/go-gateway/pay/main.go` standalone ledger (GET /pay/ledger 200, POST /pay/p2p 200/409 HMAC, 400), `services/go-gateway/canary/main.go` standalone canary (GET /canary/status 200, POST /canary/promote 5|25|100 200/400/412, POST /canary/rollback 0 + 30s drain 503), `go vet` clean, `go.mod`/`go.sum` tidy
+  - HW-2 `30f2f62`: `docs/12-HARDENING…md` live verification section (shell `next start -p 3005` 200 x4 after clean `.next`, pay `:4100` ledger/p2p, canary `:4000` status/promote/rollback, SAST notes)
+  - HW-3: `.changeset/hardening-canary.md` patch, this log, `APPROVAL_LOG.md` Phase 8 sign
+  - Verified live: shell prod `GET /` 200, `GET /offline` 200, `GET /manifest.webmanifest` 200, `GET /sw.js` 200; pay `POST /pay/p2p` 200 then 409 replay; canary `POST /canary/rollback` → 0 then `GET /canary/status` 503 draining, after 30s `POST /canary/promote 5` 200 → `25` 200 → `100` 200; `pnpm lint 43/43`, `typecheck 49/49`, `build 43/43`
+- **Decisions Made:**
+  - Stubs over full Spring/Go prod: runnable Go stubs mirror Java `CanaryService`/`LedgerService` for hardening E2E; full BE deferred to staging per `02-BACKEND §9`.
+  - Port `3005` for local when `3000` occupied by Gitea; `lighthouserc.json` keeps `3000` for CI, local override documented.
+  - `govulncheck` 28 stdlib vulns on `go1.22.2` (fixed in `1.22.11+`) — no direct code vulns; `pip-audit` 19 env vulns (not project); `semgrep`/`zap`/`lhci chrome` not installed locally — CI gap documented.
+- **Verification:**
+  - `pnpm lint` — PASS 43/43
+  - `pnpm typecheck` — PASS 49/49
+  - `pnpm build` — PASS 43/43 (shell Next.js 4 routes, `themeColor` viewport warnings only)
+  - `go vet` — PASS (pay, canary)
+  - `govulncheck` — 28 stdlib vulns (go1.22.2, fixed 1.22.11+)
+  - `pip-audit` — 19 env vulns
+  - `semgrep`/`zap`/`lhci` — NOT INSTALLED locally (CI via `hardening.yml`)
+  - `GET http://localhost:3005/` — 200, `/offline` 200, `/manifest.webmanifest` 200, `/sw.js` 200
+  - `POST http://localhost:4100/pay/p2p` — 200 then 409, `X-Webhook-Signature` present
+  - `POST http://localhost:4000/canary/promote 5→25→100` — 200 each, `rollback` 0 + drain 503 <60s
+- **Blockers / Risks:**
+  - Shell prod 500 before clean `.next` rebuild (missing vendor-chunks) — fixed by `rm -rf .next` rebuild.
+  - `chromium` absent → `lhci` failed `CHROME_PATH` — documented, CI has chrome.
+  - `go1.22.2` stdlib vulns — bump to `1.22.11+` in next maintenance.
+- **Next Step (requires approval):**
+  - Phase 8 Done — tag release via `pnpm changeset version` + `git tag`, wire remote and `git push`, or start next feature (e.g., real Spring Boot canary + gateway drain integration) — Status: AWAITING APPROVAL
+- **Links:**
+  - Evidence: this entry + `docs/12-HARDENING…md` HW-2 + `services/go-gateway/{pay,canary}/main.go` + `lighthouserc.json`
+  - Manifest: `apps/shell/public/mfe-manifest.json` rollout `100+5 [5,25,100]`
+  - Commits: `e199b37` `d31cadf` `152a479` `30f2f62`
+
 *Append next session below — do not edit past entries.*

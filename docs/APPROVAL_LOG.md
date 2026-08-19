@@ -13,3 +13,6 @@
 - 2026-08-17 — Phase 6 scaffolded (search/ads/browser/analytics/plugin-marketplace)
 - 2026-08-17 — Phase 7 portals spec + Phase 8 mobile/PWA stubs
 - 2026-08-17 — User: "i approve" — continued: mfe-store-builder, mfe-browser, mfe-analytics added (one showcase record each, no mockups).
+- 2026-08-18 — Phase 8 — APPROVED (plan 2026-08-18-hardening-and-canary)
+  - HW-1 SAST stubs ✓  HW-2 DAST/Lighthouse live ✓  HW-3 canary E2E + docs/changeset ✓ — verified: lint 43/43 typecheck 49/49 build 43/43, shell 3005 200 x4, pay 4100 200/409, canary 4000 5→25→100 + rollback <60s
+  - Next: tag release / wire remote push — AWAITING APPROVAL
