@@ -1,3 +1,4 @@
+from typing import Optional
 from fastapi import FastAPI
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
@@ -12,7 +13,7 @@ class AiMessage(BaseModel):
     text: str
     at: str
     role: str = "assistant"
-    isShowcase: bool | None = None
+    isShowcase: Optional[bool] = None
 
 showcase = AiMessage(id="ai-1", chatId="1", text="Hello from KebuGram AI — guardrails ok, history 1", at="2026-08-17T12:00:00.000Z", role="assistant", isShowcase=True)
 
