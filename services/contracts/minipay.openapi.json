@@ -1,0 +1,10 @@
+{
+  "openapi": "3.1.0",
+  "info": { "title": "MiniPay + KebuPay QR — retro 8.4e", "version": "0.1.0", "description": "MiniPay QR intent + P2P share. Go router, Java ledger, Python QR. Reuses kebupay ledgertruth." },
+  "servers": [{ "url": "http://localhost:4000" }],
+  "paths": {
+    "/pay/qr": { "post": { "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/QRIntent" } } } }, "responses": { "200": { "description": "QR payload", "content": { "application/json": { "schema": { "type": "object", "properties": { "payload": { "type": "string" }, "qrUrl": { "type": "string", "format": "uri" } } } } } } } },
+    "/pay/p2p": { "post": { "parameters": [{ "name": "Idempotency-Key", "in": "header", "required": true, "schema": { "type": "string", "format": "uuid" } }], "responses": { "200": { "description": "Ledger" } } } }
+  },
+  "components": { "schemas": { "QRIntent": { "type": "object", "required": ["payeeId"], "properties": { "payeeId": { "type": "string" }, "amountMinor": { "type": "integer" }, "currency": { "type": "string" } } } } }
+}

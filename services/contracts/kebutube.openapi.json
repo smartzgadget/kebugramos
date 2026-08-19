@@ -1,0 +1,16 @@
+{
+  "openapi": "3.1.0",
+  "info": { "title": "KebuTube — retro 8.4d", "version": "0.1.0", "description": "Go presigned + Python transcoding + Java truth. One showcase video." },
+  "servers": [{ "url": "http://localhost:4000" }],
+  "paths": {
+    "/tube/presigned": { "post": { "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/PresignedRequest" } } } }, "responses": { "200": { "description": "Presigned", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/PresignedUpload" } } } } } } },
+    "/tube/video/{id}/status": { "get": { "parameters": [{ "name": "id", "in": "path", "required": true, "schema": { "type": "string" } }], "responses": { "200": { "description": "Status", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/TranscodingStatus" } } } } } } },
+    "/tube/feed": { "get": { "responses": { "200": { "description": "Feed", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/FeedResponse" } } } } } } }
+  },
+  "components": { "schemas": {
+    "PresignedRequest": { "type": "object", "required": ["fileName", "contentType", "sizeBytes"], "properties": { "fileName": { "type": "string" }, "contentType": { "type": "string" }, "sizeBytes": { "type": "integer" } } },
+    "PresignedUpload": { "type": "object", "required": ["uploadUrl", "objectKey", "expiresAt"], "properties": { "uploadUrl": { "type": "string", "format": "uri" }, "objectKey": { "type": "string" }, "expiresAt": { "type": "string", "format": "date-time" } } },
+    "TranscodingStatus": { "type": "object", "required": ["videoId", "status", "progress"], "properties": { "videoId": { "type": "string" }, "status": { "type": "string", "enum": ["uploading", "transcoding", "ready", "failed"] }, "progress": { "type": "integer" }, "error": { "type": "string", "nullable": true } } },
+    "FeedResponse": { "type": "object", "required": ["data", "nextCursor"], "properties": { "data": { "type": "array", "items": { "type": "object" } }, "nextCursor": { "type": "string", "nullable": true } } }
+  } }
+}

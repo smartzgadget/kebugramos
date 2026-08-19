@@ -1,0 +1,40 @@
+{
+  "openapi": "3.1.0",
+  "info": { "title": "KebuPay Ledger — retro 8.4a", "version": "0.1.0", "description": "Canonical Zod → OpenAPI. Java truth owns ledger, Go routes, Python scores, FE mfe-kebupay consumes via api-client Idempotency-Key + amountMinor (XAF/RWF minor units). One showcase ledger entry." },
+  "servers": [{ "url": "http://localhost:4000" }],
+  "paths": {
+    "/pay/ledger": {
+      "get": {
+        "summary": "Get ledger + balanceMinor",
+        "responses": { "200": { "description": "Ledger", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/LedgerResponse" } } } } }
+      }
+    },
+    "/pay/p2p": {
+      "post": {
+        "summary": "P2P transfer idempotent",
+        "parameters": [{ "name": "Idempotency-Key", "in": "header", "required": true, "schema": { "type": "string", "format": "uuid" } }],
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/P2PRequest" } } } },
+        "responses": { "200": { "description": "Ledger after post", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/LedgerResponse" } } } }, "409": { "description": "Duplicate Idempotency-Key with different payload" } }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "LedgerEntry": {
+        "type": "object",
+        "required": ["id", "at", "amountMinor", "currency", "counterparty", "idempotencyKey", "status"],
+        "properties": {
+          "id": { "type": "string" },
+          "at": { "type": "string", "format": "date-time" },
+          "amountMinor": { "type": "integer", "description": "XAF/RWF minor units" },
+          "currency": { "type": "string", "minLength": 3, "maxLength": 3 },
+          "counterparty": { "type": "string" },
+          "idempotencyKey": { "type": "string", "format": "uuid" },
+          "status": { "type": "string", "enum": ["posted", "pending", "failed"] }
+        }
+      },
+      "LedgerResponse": { "type": "object", "required": ["data", "balanceMinor"], "properties": { "data": { "type": "array", "items": { "$ref": "#/components/schemas/LedgerEntry" } }, "balanceMinor": { "type": "integer" } } },
+      "P2PRequest": { "type": "object", "required": ["toHandle", "amountMinor", "currency", "idempotencyKey"], "properties": { "toHandle": { "type": "string", "minLength": 2, "maxLength": 32 }, "amountMinor": { "type": "integer", "minimum": 1 }, "currency": { "type": "string", "minLength": 3, "maxLength": 3 }, "idempotencyKey": { "type": "string", "format": "uuid" } } }
+    }
+  }
+}

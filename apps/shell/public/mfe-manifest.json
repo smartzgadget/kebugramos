@@ -1,0 +1,38 @@
+{
+  "mfes": {
+    "mfe-auth": { "version": "0.1.0", "url": "http://localhost:3005/remoteEntry.js" },
+    "mfe-profile": { "version": "0.1.0", "url": "http://localhost:3006/remoteEntry.js" },
+    "mfe-kebuchat": { "version": "0.1.0", "url": "http://localhost:3010/remoteEntry.js" },
+    "mfe-ai-chat": { "version": "0.1.0", "url": "http://localhost:3011/remoteEntry.js" },
+    "mfe-kebutube": { "version": "0.1.0", "url": "http://localhost:3020/remoteEntry.js" },
+    "mfe-kebucommunity": { "version": "0.1.0", "url": "http://localhost:3021/remoteEntry.js" },
+    "mfe-kebubook": { "version": "0.1.0", "url": "http://localhost:3022/remoteEntry.js" },
+    "mfe-kebublogs": { "version": "0.1.0", "url": "http://localhost:3023/remoteEntry.js" },
+    "mfe-kebumarket": { "version": "0.1.0", "url": "http://localhost:3030/remoteEntry.js" },
+    "mfe-store-builder": { "version": "0.1.0", "url": "http://localhost:3031/remoteEntry.js" },
+    "mfe-kebupay": { "version": "0.1.0", "url": "http://localhost:3040/remoteEntry.js" },
+    "mfe-logistics": { "version": "0.1.0", "url": "http://localhost:3041/remoteEntry.js" },
+    "mfe-logistics-partner-hub": { "version": "0.1.0", "url": "http://localhost:3043/remoteEntry.js" },
+    "mfe-posthub-connector": { "version": "0.1.0", "url": "http://localhost:3042/remoteEntry.js" },
+    "mfe-search": { "version": "0.1.0", "url": "http://localhost:3050/remoteEntry.js" },
+    "mfe-ads-manager": { "version": "0.1.0", "url": "http://localhost:3051/remoteEntry.js" },
+    "mfe-ads-display": { "version": "0.1.0", "url": "http://localhost:3055/remoteEntry.js" },
+    "mfe-consumer-sponsorship": { "version": "0.1.0", "url": "http://localhost:3056/remoteEntry.js" },
+    "mfe-plugin-marketplace": { "version": "0.1.0", "url": "http://localhost:3052/remoteEntry.js" },
+    "mfe-browser": { "version": "0.1.0", "url": "http://localhost:3053/remoteEntry.js" },
+    "mfe-analytics": { "version": "0.1.0", "url": "http://localhost:3054/remoteEntry.js" },
+    "mfe-business-pages": { "version": "0.1.0", "url": "http://localhost:3060/remoteEntry.js" },
+    "mfe-brand-protection": { "version": "0.1.0", "url": "http://localhost:3062/remoteEntry.js" },
+    "mfe-developer-portal": { "version": "0.1.0", "url": "http://localhost:3063/remoteEntry.js" },
+    "mfe-admin": { "version": "0.1.0", "url": "http://localhost:3064/remoteEntry.js" },
+    "mfe-help-support": { "version": "0.1.0", "url": "http://localhost:3061/remoteEntry.js" }
+  },
+  "rollout": {
+    "mfe-kebuchat": { "percent": 100, "regions": ["KE", "UG", "RW", "TZ", "GLOBAL"] },
+    "mfe-kebupay": { "percent": 100, "regions": ["RW", "GLOBAL"] },
+    "mfe-kebumarket": { "percent": 100, "regions": ["RW", "GLOBAL"] },
+    "mfe-kebutube": { "percent": 5, "regions": ["RW"] },
+    "mfe-kebucommunity": { "percent": 5, "regions": ["RW"] }
+  },
+  "canary": { "stages": [5, 25, 100], "slo": { "p95Ms": 120, "errorRate": 0.01 }, "rollbackSec": 60, "drainSec": 30 }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "@kebugram/mfe-analytics",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": { "dev": "next dev -p 3054", "build": "tsc --noEmit", "lint": "eslint src --ext .ts,.tsx", "typecheck": "tsc --noEmit" },
+  "dependencies": {
+    "next": "14.2.5",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "zod": "^3.23.8",
+    "@kebugram/api-client": "workspace:*",
+    "@kebugram/design-system": "workspace:*",
+    "@kebugram/analytics-sdk": "workspace:*"
+  }
+}

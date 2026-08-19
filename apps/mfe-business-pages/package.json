@@ -1,0 +1,7 @@
+{
+  "name": "@kebugram/mfe-business-pages",
+  "private": true,
+  "version": "0.1.0",
+  "scripts": { "dev": "next dev -p 3060", "build": "tsc --noEmit", "lint": "eslint src --ext .ts,.tsx", "typecheck": "tsc --noEmit" },
+  "dependencies": { "next": "14.2.5", "react": "18.3.1", "react-dom": "18.3.1" }
+}

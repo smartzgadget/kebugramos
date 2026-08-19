@@ -1,0 +1,13 @@
+### Session 2026-08-17 — S08 — Lint/Build Gate Fixes (APPROVE A)
+- **Owner Approval:** APPROVE A (eslint src + parser + tsc --noEmit for remotes)
+- **Goal:** Fix `pnpm lint` (`next lint` missing app) + `pnpm build` (`next build` missing app) for 26 MFEs
+- **Completed:**
+  - All `apps/mfe-*` `package.json:lint` → `eslint src --ext .ts,.tsx` (shell keeps `next lint`)
+  - `kebugramos/.eslintrc.json` root + `package.json` added `eslint`, `@typescript-eslint/parser`, `@typescript-eslint/eslint-plugin`
+  - Fixed `apps/mfe-business-pages`, `mfe-ai-chat`, `mfe-kebucommunity` `build` → `tsc --noEmit` (others already `tsc --noEmit` verified: `mfe-auth`, `mfe-kebuchat`; remaining 20 already patched in prior batch, re-verified on next `pnpm build`)
+- **Verification (local terminal, `~/kebugramos`):**
+  - `pnpm install` ✓ (corepack 9.4.0, `Done 1.7s`)
+  - `pnpm lint` — was `0/27 FAILED mfe-auth#lint (findPagesDir)` → after eslint switch `2/27 FAILED mfe-ai-chat#lint` (parser missing) → after parser added `2/27 FAILED mfe-ai-chat#lint` (next gate) → now 2/27, awaiting full log for `mfe-ai-chat#lint` tail
+  - `pnpm build` — was `0/27 FAILED mfe-ai-chat + kebucommunity` → after `tsc --noEmit` fix `0/27 FAILED mfe-business-pages#build` → patched `mfe-business-pages` to `tsc --noEmit`, awaiting next `pnpm build`
+  - `muse.bash` here still `proc/self/exe` blocked — all `muse.bash` verification `BLOCKED`, file-verified only
+- **Next Step:** Run in `~/kebugramos`: `pnpm lint 2>&1 | tail -n 200; pnpm typecheck; pnpm build` — paste `EXIT_*` + failed workspace log — AWAITING APPROVAL to continue fixing per-workspace until 27/27 green

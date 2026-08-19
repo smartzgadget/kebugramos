@@ -1,0 +1,15 @@
+{
+  "openapi": "3.1.0",
+  "info": { "title": "KebuGram Canary + Rollback — 8.5", "version": "0.1.0", "description": "Canary 5→25→100 per MFE+BE, health SLO, rollback <60s via manifest disabled + gateway drain. Zod → OpenAPI." },
+  "servers": [{ "url": "http://localhost:4000" }],
+  "paths": {
+    "/canary/status": { "get": { "responses": { "200": { "description": "Rollout map", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CanaryMap" } } } } } } },
+    "/canary/promote": { "post": { "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Promote" } } } }, "responses": { "200": { "description": "Canary map" }, "412": { "description": "SLO breached — promotion blocked" } } } },
+    "/canary/rollback": { "post": { "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Rollback" } } } }, "responses": { "200": { "description": "Rolled back <60s" } } } }
+  },
+  "components": { "schemas": {
+    "CanaryMap": { "type": "object", "additionalProperties": { "type": "object", "required": ["percent", "version"], "properties": { "percent": { "type": "integer", "minimum": 0, "maximum": 100 }, "version": { "type": "string" }, "regions": { "type": "array", "items": { "type": "string" } }, "slo": { "type": "object", "properties": { "p95Ms": { "type": "number" }, "errorRate": { "type": "number" } } } } } },
+    "Promote": { "type": "object", "required": ["mfe", "toPercent"], "properties": { "mfe": { "type": "string" }, "toPercent": { "type": "integer", "enum": [5, 25, 100] } } },
+    "Rollback": { "type": "object", "required": ["mfe"], "properties": { "mfe": { "type": "string" }, "reason": { "type": "string" } } }
+  } }
+}

@@ -1,0 +1,21 @@
+{
+  "openapi": "3.1.0",
+  "info": { "title": "KebuCommunity — retro 8.4c", "version": "0.1.0", "description": "Canonical Zod → OpenAPI. Java truth moderation queue RBAC gated." },
+  "servers": [{ "url": "http://localhost:4000" }],
+  "paths": {
+    "/community/groups": { "get": { "responses": { "200": { "description": "Groups", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/GroupsResponse" } } } } } } },
+    "/community/feed": { "get": { "parameters": [{ "name": "groupId", "in": "query", "schema": { "type": "string" } }], "responses": { "200": { "description": "Feed", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/FeedResponse" } } } } } } },
+    "/community/post": { "post": { "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/CreatePost" } } } }, "responses": { "200": { "description": "Post", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Post" } } } } } } },
+    "/community/moderation/queue": { "get": { "summary": "RBAC moderator/admin only", "responses": { "200": { "description": "Queue", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ModerationQueue" } } } }, "403": { "description": "Forbidden" } } } },
+    "/community/moderation/action": { "post": { "summary": "Approve/reject RBAC", "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ModerationAction" } } } }, "responses": { "200": { "description": "Post", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Post" } } } } } } }
+  },
+  "components": { "schemas": {
+    "Group": { "type": "object", "required": ["id", "name", "handle", "memberCount"], "properties": { "id": { "type": "string" }, "name": { "type": "string" }, "handle": { "type": "string" }, "memberCount": { "type": "integer" }, "isJoined": { "type": "boolean" } } },
+    "GroupsResponse": { "type": "object", "required": ["data"], "properties": { "data": { "type": "array", "items": { "$ref": "#/components/schemas/Group" } } } },
+    "Post": { "type": "object", "required": ["id", "groupId", "author", "body", "createdAt", "moderationStatus"], "properties": { "id": { "type": "string" }, "groupId": { "type": "string" }, "author": { "type": "object", "required": ["id", "name"], "properties": { "id": { "type": "string" }, "name": { "type": "string" } } }, "body": { "type": "string" }, "createdAt": { "type": "string", "format": "date-time" }, "moderationStatus": { "type": "string", "enum": ["pending", "approved", "rejected"] } } },
+    "FeedResponse": { "type": "object", "required": ["data", "nextCursor"], "properties": { "data": { "type": "array", "items": { "$ref": "#/components/schemas/Post" } }, "nextCursor": { "type": "string", "nullable": true } } },
+    "ModerationQueue": { "type": "object", "required": ["data"], "properties": { "data": { "type": "array", "items": { "$ref": "#/components/schemas/Post" } } } },
+    "CreatePost": { "type": "object", "required": ["groupId", "body"], "properties": { "groupId": { "type": "string" }, "body": { "type": "string", "minLength": 1, "maxLength": 1000 } } },
+    "ModerationAction": { "type": "object", "required": ["postId", "action"], "properties": { "postId": { "type": "string" }, "action": { "type": "string", "enum": ["approve", "reject"] } } }
+  } }
+}

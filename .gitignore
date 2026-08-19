@@ -1,0 +1,15 @@
+node_modules
+.next
+dist
+build
+out
+coverage
+.turbo
+.parcel-cache
+*.tsbuildinfo
+.env
+.env.local
+.env.*.local
+.DS_Store
+.changeset/*.md
+! .changeset/config.json
